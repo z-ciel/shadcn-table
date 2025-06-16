@@ -124,7 +124,7 @@ export function getTasksTableColumns({
       ),
       cell: ({ cell }) => {
         const status = tasks.status.enumValues.find(
-          (status) => status === cell.getValue<Task["status"]>(),
+          (s): s is Task["status"] => s === cell.getValue<Task["status"]>(),
         );
 
         if (!status) return null;
@@ -141,12 +141,15 @@ export function getTasksTableColumns({
       meta: {
         label: "Status",
         variant: "multiSelect",
-        options: tasks.status.enumValues.map((status) => ({
-          label: status.charAt(0).toUpperCase() + status.slice(1),
-          value: status,
-          count: statusCounts[status],
-          icon: getStatusIcon(status),
-        })),
+        options: tasks.status.enumValues.map((status) => {
+          const s = status as Task["status"];
+          return {
+            label: status.charAt(0).toUpperCase() + status.slice(1),
+            value: s,
+            count: statusCounts[s],
+            icon: getStatusIcon(s),
+          };
+        }),
         icon: CircleDashed,
       },
       enableColumnFilter: true,
@@ -159,7 +162,7 @@ export function getTasksTableColumns({
       ),
       cell: ({ cell }) => {
         const priority = tasks.priority.enumValues.find(
-          (priority) => priority === cell.getValue<Task["priority"]>(),
+          (p): p is Task["priority"] => p === cell.getValue<Task["priority"]>(),
         );
 
         if (!priority) return null;
@@ -176,12 +179,15 @@ export function getTasksTableColumns({
       meta: {
         label: "Priority",
         variant: "multiSelect",
-        options: tasks.priority.enumValues.map((priority) => ({
-          label: priority.charAt(0).toUpperCase() + priority.slice(1),
-          value: priority,
-          count: priorityCounts[priority],
-          icon: getPriorityIcon(priority),
-        })),
+        options: tasks.priority.enumValues.map((priority) => {
+          const p = priority as Task["priority"];
+          return {
+            label: priority.charAt(0).toUpperCase() + priority.slice(1),
+            value: p,
+            count: priorityCounts[p],
+            icon: getPriorityIcon(p),
+          };
+        }),
         icon: ArrowUpDown,
       },
       enableColumnFilter: true,
